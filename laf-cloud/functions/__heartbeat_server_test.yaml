@@ -1,0 +1,5 @@
+name: __heartbeat_server_test
+methods:
+  - GET
+  - POST
+tags: []
