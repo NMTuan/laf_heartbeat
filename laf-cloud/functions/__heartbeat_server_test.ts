@@ -8,6 +8,10 @@ interface Action {
     }
 }
 
+const heartBeatConfig = {
+    max: 10 // 最大接入数量
+}
+
 // 配置项
 const config = {
     name: 'laf_heartbeat_s_test', // 当前应用名称
@@ -39,6 +43,34 @@ const shared = {
 
 const actions: Action = {}
 
+// 获取 client 信息
+actions.fetch = {
+    methods: ['POST'],
+    auth: false,
+    async handler(ctx) {
+        const { clientUrl } = ctx.body
+        if (!clientUrl) {
+            return { code: 40000 }
+        }
+        const item = await collection()
+            .where({
+                clientUrl
+            })
+            .getOne()
+        // 存在则返回整个数据
+        if (item.data !== null) {
+            return {
+                code: 20000,
+                data: item.data
+            }
+        } else {
+            return {
+                code: 40000
+            }
+        }
+    }
+}
+
 // 注册 client 信息
 actions.signup = {
     methods: ['POST'],
@@ -48,6 +80,7 @@ actions.signup = {
         if (!clientUrl) {
             return { code: 40000 }
         }
+
         // 先检查数据库是否已存在
         const exits = await collection()
             .where({
@@ -61,6 +94,16 @@ actions.signup = {
                 data: exits.data
             }
         }
+
+        // 检查是否超出数据总量
+        const { total } = await collection().count()
+        if (total >= heartBeatConfig.max) {
+            return {
+                code: 40000,
+                message: 'The maximum number of clients has been exceeded'
+            }
+        }
+
         // 不存在则随机生成key，并插入新数据
         const key = (Date.now() * Math.random()).toString(36)
         const inserted = await collection().add({
@@ -104,7 +147,7 @@ actions.active = {
             }
             if (item.data.state !== 0) {
                 return {
-                    code: 40000,
+                    code: 20000,
                     message: 'No need to activate again'
                 }
             }
@@ -268,6 +311,7 @@ actions.update = {
 
         return {
             code: 20000,
+            message: 'updated',
             data: item.data
         }
     }
@@ -419,6 +463,30 @@ export const schedule = async () => {
 //     auth: false,
 //     handler: schedule
 // }
+
+// 获取服务器数据
+actions.getInfo = {
+    methods: ['GET'],
+    auth: false,
+    async handler() {
+        const count = await collection().count()
+        const active = await collection()
+            .where({
+                state: {
+                    $in: [1, 2]
+                }
+            })
+            .count()
+        return {
+            code: 20000,
+            data: {
+                active: active.total, // 激活和生效的数据
+                count: count.total, // 总数据条数
+                max: heartBeatConfig.max // 最大接入数量
+            }
+        }
+    }
+}
 
 // 入口，拦截器
 export default async function (ctx: FunctionContext) {
