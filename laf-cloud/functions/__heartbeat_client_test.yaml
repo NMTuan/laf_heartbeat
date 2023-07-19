@@ -1,0 +1,5 @@
+name: __heartbeat_client_test
+methods:
+  - GET
+  - POST
+tags: []
