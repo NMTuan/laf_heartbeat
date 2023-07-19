@@ -2,7 +2,7 @@
  * @Author: NMTuan
  * @Email: NMTuan@qq.com
  * @Date: 2023-07-18 20:55:06
- * @LastEditTime: 2023-07-19 06:13:45
+ * @LastEditTime: 2023-07-19 15:21:00
  * @LastEditors: NMTuan
  * @Description:
  * @FilePath: \laf_heartbeat\nuxt.config.ts
@@ -10,11 +10,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     ssr: false,
-    devtools: { enabled: true },
+    devtools: { enabled: false },
     css: ['@unocss/reset/normalize.css'],
     modules: ['@unocss/nuxt', '@pinia/nuxt', '@element-plus/nuxt'],
     experimental: {
         viewTransition: true
+    },
+    imports: {
+        dirs: ['stores']
     },
     vite: {
         css: {
