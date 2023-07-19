@@ -1,10 +1,8 @@
 <template>
-    <div class="h-screen flex-1 flex flex-col items-stretch justify-between">
+    <div class="w-720px mx-auto bg-white shadow min-h-screen">
         <LayoutHeader class="flex-shrink-0"></LayoutHeader>
-        <div class="flex flex-col items-stretch justify-center overflow-hidden">
-            <el-scrollbar>
-                <slot></slot>
-            </el-scrollbar>
+        <div class="overflow-hidden">
+            <slot></slot>
         </div>
         <LayoutFooter class="flex-shrink-0"></LayoutFooter>
     </div>

@@ -2,7 +2,7 @@
  * @Author: NMTuan
  * @Email: NMTuan@qq.com
  * @Date: 2023-07-19 15:12:14
- * @LastEditTime: 2023-07-19 17:39:50
+ * @LastEditTime: 2023-07-19 21:27:10
  * @LastEditors: NMTuan
  * @Description:
  * @FilePath: \laf_heartbeat\stores\app.ts
@@ -207,6 +207,33 @@ export const useAppStore = defineStore('useAppStore', () => {
                 })
         })
     }
+
+    // 移除客户端
+    const removeClient = () => {
+        return new Promise((resolve, reject) => {
+            request({
+                url: server.value.url,
+                method: 'post',
+                query: {
+                    action: 'remove'
+                },
+                body: {
+                    id: client.value._id
+                }
+            })
+                .then((res) => {
+                    console.log(1)
+                    if (res.code === 20000) {
+                        window.location.reload()
+                    }
+                    resolve(res)
+                })
+                .catch((err: Error) => {
+                    console.log(2)
+                    reject(err)
+                })
+        })
+    }
     return {
         server,
         client,
@@ -215,6 +242,7 @@ export const useAppStore = defineStore('useAppStore', () => {
         signupClient,
         activeClient,
         updateClient,
-        togglePaused
+        togglePaused,
+        removeClient
     }
 })
