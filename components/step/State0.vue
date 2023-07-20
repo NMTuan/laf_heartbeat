@@ -2,7 +2,7 @@
  * @Author: NMTuan
  * @Email: NMTuan@qq.com
  * @Date: 2023-07-19 16:47:24
- * @LastEditTime: 2023-07-19 21:31:19
+ * @LastEditTime: 2023-07-20 10:56:53
  * @LastEditors: NMTuan
  * @Description:
  * @FilePath: \laf_heartbeat\components\step\State0.vue
@@ -16,7 +16,7 @@
             <el-form-item label="heartBeatConfig.serverUrl">
                 <el-input :value="appStore.server.url" readonly> </el-input>
             </el-form-item>
-            <el-form-item label="heartBeatConfig.serverUrl">
+            <el-form-item label="heartBeatConfig.serverKey">
                 <el-input :value="appStore.client.key" readonly> </el-input>
             </el-form-item>
             <el-form-item>
