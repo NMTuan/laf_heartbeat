@@ -1,5 +1,0 @@
-name: __heartbeat_server
-methods:
-  - GET
-  - POST
-tags: []
