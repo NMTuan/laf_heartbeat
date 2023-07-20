@@ -329,9 +329,13 @@ actions.receive = {
                 message: 'missing parameter'
             }
         }
+
         const updated = await collection()
             .where({
-                key
+                key,
+                state: {
+                    $ne: 0 // 未激活的不更新
+                }
             })
             .update({
                 errorCount: 0, // 重置计数器
@@ -339,9 +343,15 @@ actions.receive = {
                 state: 2, // 更新状态为：已生效
                 updatedAt: Date.now() // 更新更新时间
             })
+        if (updated.ok && updated.updated) {
+            return {
+                code: 20000,
+                data: updated
+            }
+        }
         return {
-            code: 20000,
-            data: updated
+            code: 40000,
+            message: 'the client not active'
         }
     }
 }
